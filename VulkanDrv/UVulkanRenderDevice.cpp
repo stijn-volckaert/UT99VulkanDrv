@@ -304,6 +304,7 @@ void UVulkanRenderDevice::Unlock(UBOOL Blit)
 
 void UVulkanRenderDevice::CheckFPSLimit()
 {
+#if !UNREAL_TOURNAMENT_OLDUNREAL
 	using namespace std::chrono;
 	using namespace std::this_thread;
 
@@ -334,6 +335,7 @@ void UVulkanRenderDevice::CheckFPSLimit()
 			sleep_for(microseconds(timeToWait - 2'000));
 		}
 	}
+#endif
 }
 
 void UVulkanRenderDevice::DrawComplexSurface(FSceneNode* Frame, FSurfaceInfo& Surface, FSurfaceFacet& Facet)

@@ -2,10 +2,18 @@
 
 #include "Renderer.h"
 
+#if UNREAL_TOURNAMENT_OLDUNREAL
+class UVulkanRenderDevice : public URenderDeviceOldUnreal469
+#else
 class UVulkanRenderDevice : public URenderDevice
+#endif
 {
 public:
+#if UNREAL_TOURNAMENT_OLDUNREAL
+	DECLARE_CLASS(UVulkanRenderDevice, URenderDeviceOldUnreal469, CLASS_Config, VulkanDrv)
+#else
 	DECLARE_CLASS(UVulkanRenderDevice, URenderDevice, CLASS_Config, VulkanDrv)
+#endif
 
 	UVulkanRenderDevice();
 	void StaticConstructor();

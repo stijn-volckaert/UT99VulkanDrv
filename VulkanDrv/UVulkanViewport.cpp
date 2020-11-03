@@ -79,8 +79,6 @@ UBOOL UVulkanViewport::Lock(FPlane FlashScale, FPlane FlashFog, FPlane ScreenCle
 {
 	guard(UVulkanViewport::LockWindow);
 	UVulkanClient* Client = GetOuterUVulkanClient();
-	clock(Client->DrawCycles);
-	unclock(Client->DrawCycles);
 	return UViewport::Lock(FlashScale, FlashFog, ScreenClear, RenderLockFlags, HitData, HitSize);
 	unguard;
 }
@@ -295,7 +293,11 @@ void UVulkanViewport::UpdateWindowFrame()
 	unguard;
 }
 
+#if UNREAL_TOURNAMENT_OLDUNREAL
+void UVulkanViewport::OpenWindow(void* ParentWindow, UBOOL Temporary, INT NewX, INT NewY, INT OpenX, INT OpenY, const TCHAR* ForcedRenDevClass)
+#else
 void UVulkanViewport::OpenWindow(DWORD ParentWindow, UBOOL Temporary, INT NewX, INT NewY, INT OpenX, INT OpenY)
+#endif
 {
 	guard(UVulkanViewport::OpenWindow);
 	check(Actor);
@@ -446,11 +448,19 @@ void UVulkanViewport::TryRenderDevice(const TCHAR* ClassName, INT NewX, INT NewY
 		NewY = Fullscreen ? C->FullscreenViewportY : C->WindowedViewportY;
 
 	// Find device driver.
+#if UNREAL_TOURNAMENT_OLDUNREAL
+	UClass* RenderClass = UObject::StaticLoadClass(URenderDeviceOldUnreal469::StaticClass(), NULL, ClassName, NULL, 0, NULL);
+#else
 	UClass* RenderClass = UObject::StaticLoadClass(URenderDevice::StaticClass(), NULL, ClassName, NULL, 0, NULL);
+#endif
 	if (RenderClass)
 	{
 		HoldCount++;
+#if UNREAL_TOURNAMENT_OLDUNREAL
+		RenDev = ConstructObject<URenderDeviceOldUnreal469>(RenderClass, this);
+#else
 		RenDev = ConstructObject<URenderDevice>(RenderClass, this);
+#endif
 		if (RenDev->Init(this, NewX, NewY, NewColorBytes, Fullscreen))
 		{
 			if (GIsRunning)

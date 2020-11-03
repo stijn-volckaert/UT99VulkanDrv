@@ -86,16 +86,16 @@ void VulkanTexture::Update(Renderer* renderer, const FTextureInfo& Info, DWORD P
 					}
 				});
 			break;
-		case TEXF_RGB16: data = UploadData(renderer, Info, PolyFlags, VK_FORMAT_R5G6B5_UNORM_PACK16, [](auto mip) { return mip->USize * mip->VSize * 2; }); break;
-		case TEXF_DXT1: data = UploadData(renderer, Info, PolyFlags, VK_FORMAT_BC1_RGBA_UNORM_BLOCK, block4x4_to_64bits); break;
+		case TEXF_RGB16_: data = UploadData(renderer, Info, PolyFlags, VK_FORMAT_R5G6B5_UNORM_PACK16, [](auto mip) { return mip->USize * mip->VSize * 2; }); break;
+		case TEXF_DXT1: data = UploadData(renderer, Info, PolyFlags, VK_FORMAT_BC1_RGBA_UNORM_BLOCK, [](auto mip) { return mip->USize * mip->VSize / 2; }); break;
 		case TEXF_RGB8: data = UploadData(renderer, Info, PolyFlags, VK_FORMAT_R8G8B8_UNORM, [](auto mip) { return mip->USize * mip->VSize * 3; }); break;
-		case TEXF_RGBA8: data = UploadData(renderer, Info, PolyFlags, VK_FORMAT_B8G8R8A8_UNORM, [](auto mip) { return mip->USize * mip->VSize * 4; }); break;
-		case 0x06/*TEXF_BC2*/: data = UploadData(renderer, Info, PolyFlags, VK_FORMAT_BC2_UNORM_BLOCK, block4x4_to_128bits); break;
-		case 0x07/*TEXF_BC3*/: data = UploadData(renderer, Info, PolyFlags, VK_FORMAT_BC3_UNORM_BLOCK, block4x4_to_128bits); break;
-		case 0x1a/*TEXF_BC1_PA*/: data = UploadData(renderer, Info, PolyFlags, VK_FORMAT_BC1_RGBA_UNORM_BLOCK, block4x4_to_64bits); break;
-		case 0x0c/*TEXF_BC7*/: data = UploadData(renderer, Info, PolyFlags, VK_FORMAT_BC7_UNORM_BLOCK, block4x4_to_128bits); break;
-		case 0x0d/*TEXF_BC6H_S*/: data = UploadData(renderer, Info, PolyFlags, VK_FORMAT_BC6H_SFLOAT_BLOCK, block4x4_to_128bits); break;
-		case 0x0e/*TEXF_BC6H*/: data = UploadData(renderer, Info, PolyFlags, VK_FORMAT_BC6H_UFLOAT_BLOCK, block4x4_to_128bits); break;
+		case TEXF_BGRA8: data = UploadData(renderer, Info, PolyFlags, VK_FORMAT_B8G8R8A8_UNORM, [](auto mip) { return mip->USize * mip->VSize * 4; }); break;
+		case 0x06/*TEXF_BC2*/: data = UploadData(renderer, Info, PolyFlags, VK_FORMAT_BC2_UNORM_BLOCK, [](auto mip) { return mip->USize * mip->VSize; }); break;
+		case 0x07/*TEXF_BC3*/: data = UploadData(renderer, Info, PolyFlags, VK_FORMAT_BC3_UNORM_BLOCK, [](auto mip) { return mip->USize * mip->VSize; }); break;
+		case 0x1a/*TEXF_BC1_PA*/: data = UploadData(renderer, Info, PolyFlags, VK_FORMAT_BC1_RGBA_UNORM_BLOCK, [](auto mip) { return mip->USize * mip->VSize / 2; }); break;
+		case 0x0c/*TEXF_BC7*/: data = UploadData(renderer, Info, PolyFlags, VK_FORMAT_BC7_UNORM_BLOCK, [](auto mip) { return mip->USize * mip->VSize; }); break;
+		//case 0x0d/*TEXF_BC6H_S*/: data = UploadData(renderer, Info, PolyFlags, VK_FORMAT_BC6H_SFLOAT_BLOCK, [](auto mip) { return mip->USize * mip->VSize * ??; }); break;
+		//case 0x0e/*TEXF_BC6H*/: data = UploadData(renderer, Info, PolyFlags, VK_FORMAT_BC6H_UFLOAT_BLOCK, [](auto mip) { return mip->USize * mip->VSize * ??; }); break;
 		default: data = UploadWhite(renderer, Info, PolyFlags); break;
 		}
 

@@ -38,7 +38,11 @@ public:
 	void Repaint(UBOOL Blit) override;
 	void SetModeCursor() override;
 	void UpdateWindowFrame() override;
+#if UNREAL_TOURNAMENT_OLDUNREAL
+	void OpenWindow(void* ParentWindow, UBOOL Temporary, INT NewX, INT NewY, INT OpenX, INT OpenY, const TCHAR* ForcedRenDevClass = NULL) override;
+#else
 	void OpenWindow(DWORD ParentWindow, UBOOL Temporary, INT NewX, INT NewY, INT OpenX, INT OpenY) override;
+#endif
 	void CloseWindow() override;
 	void UpdateInput(UBOOL Reset) override;
 	void* GetWindow() override;
